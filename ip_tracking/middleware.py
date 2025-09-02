@@ -41,6 +41,7 @@ class IPLoggingMiddleWare:
                     "city": details.city if hasattr(details, "city") else None
                 }
                 cache.set(cache_key, geo_data, timeout=60*60*24)
+                print("DEBUG >>> Cached value:", cache.get(cache_key))
             except Exception as e:
                 logger.error(f"Geolocation lookup failed for {ip}: {e}")
                 geo_data = {

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import environ
 import os
+from celery.schedules import crontab
 
 env = environ.Env()
 
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ip_tracking',
+    'django_ratelimit',
 ]
 
 MIDDLEWARE = [
@@ -139,3 +141,9 @@ CACHES = {
     }
 }
 
+CELERY_BEAT_SCHEDULE = {
+    "detect-anomalies-every-hour": {
+        "task": "ip_tracking.tasks.detect_anomalies",
+        "schedule": crontab(minute=0, hour="*"),  # every hour
+    },
+}
